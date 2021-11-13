@@ -13,6 +13,13 @@
 #include "richlistdb.h"
 #include "servicelistdb.h"
 #include "serviceitemlistdb.h"
+//Það sem þarf fyrir scramble, ábyggilega eitthvað af þessu nú þegar í einhverjum af þessum skrám
+//---------------------------------------
+#include <bits/stdc++.h> // time
+#include <stdlib.h> // srand
+#include <algorithm> // random_shuffle
+#include <string> // string
+//---------------------------------------
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCDFAInspection"
 #ifdef ENABLE_WALLET
@@ -1642,6 +1649,28 @@ Value verifymessage(const Array& params, bool fHelp)
     return (pubkey.GetID() == keyID);
 }
 
+    Value scramble(const Array& params, bool fHelp) {
+        if (fHelp || params.size() != 1)
+                throw runtime_error(
+                    "scramble \n"
+                    "\nReturns the input in random order\n"
+                    "\nArguments:\n"
+                    "\"string\"  (string, required) The string that will be scrambled\n"
+                    "\nResult:\n"
+                    "\"string\"  (string) The string is now scrambled\n"
+                );
+
+        string shuffled  = params[0].get_str();
+        //Þarf seed svo að scramble skilar ekki bara alltaf alveg eins röðun
+        //Þarf #include <bits/stdc++.h> til þess að virka
+        srand(std::time(0));
+        //shuffle-a / scramble-a strenginn
+        random_shuffle(shuffled.begin(),shuffled.end());
+        //Skila strengnum shuffled
+        Object result;
+        result.push_back(shuffled);
+        return result;
+    }
 
 #pragma clang diagnostic pop
 
